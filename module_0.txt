@@ -1,1 +1,36 @@
-print("hello world")
+import numpy as np
+import random
+ 
+def score_game(game_core): 
+    """Run the game 1000 times to see how quickly the game guesses the number"""
+    
+    count_ls=[]
+    np.random.seed(1)  # fix RANDOM SEED to keep experiment reproducible
+    random_array=np.random.randint(1,101, size=(1000))
+    for number in random_array:
+        count_ls.append(game_core(number))
+    score=int(np.mean(count_ls))
+    print(f"Ваш алгоритм угадывает число в среднем за {score} попыток")
+    return(score)   
+
+    
+def game_core(number):
+    """First, set any random number, narrow the search area, 
+    and then decrease or increase it depending on whether it is more or less than what you need.
+
+    The function takes a hidden number and returns the number of attempts"""
+    
+    count=1
+    max_number=100
+    min_number=1
+    predict=np.random.randint(1,101)
+    while number!=predict:
+        count+=1
+        predict=(max_number+min_number) //2 # create a condition for narrowing the search area for a number
+        if number>predict: 
+            min_number=predict+1
+        elif number<predict: 
+            max_number=predict
+    return(count)
+
+score_game(game_core)
